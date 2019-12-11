@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static MainCharacterController;
 
 public class GridManager : MonoBehaviour
 {
@@ -16,10 +17,12 @@ public class GridManager : MonoBehaviour
     public GameObject Character;
     public Vector3 TouchPosition;
     public Vector3 ClickPosition;
+    MainCharacterController CharacterController;
     // Start is called before the first frame update
     void Start()
     {
         Character = (GameObject)Instantiate(CharacterPrefab);
+        CharacterController = Character.GetComponent<MainCharacterController>();
         GenerateGrid();
     }
     void Update() {
@@ -35,35 +38,38 @@ public class GridManager : MonoBehaviour
         {
             GameObject LeftRoom = (GameObject)Instantiate(LeftRoomPrefab, transform);
             GameObject MiddleRoom = (GameObject)Instantiate(MiddleRoomPrefab, transform);
-            GameObject RightRoom = (GameObject)Instantiate(RightRoomPrefab, transform);            
+            GameObject RightRoom = (GameObject)Instantiate(RightRoomPrefab, transform);
+            RoomController LeftRoomController = LeftRoom.GetComponent<RoomController>();
+            RoomController MidRoomController = MiddleRoom.GetComponent<RoomController>();
+            RoomController RightRoomController = RightRoom.GetComponent<RoomController>();
             LeftRoom.transform.position = new Vector2(0 * tileSizeX, row * -tileSizeY);
-            LeftRoom.GetComponent<RoomController>().Y = row;
-            LeftRoom.GetComponent<RoomController>().X = 0;
-            LeftRoom.name = row + "" + 0;
+            LeftRoomController.Y = row;
+            LeftRoomController.X = 0;
+            LeftRoom.name = 0 + "" + row;
             MiddleRoom.transform.position = new Vector2(1 * tileSizeX, row * -tileSizeY);
-            MiddleRoom.GetComponent<RoomController>().Y = row;
-            MiddleRoom.GetComponent<RoomController>().X = 1;
-            MiddleRoom.name = row + "" + 1;
+            MidRoomController.Y = row;
+            MidRoomController.X = 1;
+            MiddleRoom.name = 1 + "" + row;
             RightRoom.transform.position = new Vector2(2 * tileSizeX, row * -tileSizeY);
-            RightRoom.GetComponent<RoomController>().Y = row;
-            RightRoom.GetComponent<RoomController>().X = 2;
-            RightRoom.name = row + "" + 2;
-            if(row == 1) {
-                Character.GetComponent<MainCharacterController>().PositionCharacter(RightRoom);
+            RightRoomController.Y = row;
+            RightRoomController.X = 2;
+            RightRoom.name = 2 + "" + row;
+            if(row == 0) {
+                CharacterController.PositionCharacter(RightRoom);
             }
 
             #region Ladder create
             LastSLadder = NewLadder; // Connect with 2nd ladder from previous room
-            NewLadder = UnityEngine.Random.Range(0, 2); // Random new ladder location
+            NewLadder = UnityEngine.Random.Range(0, 3); // Random new ladder location
             if(NewLadder == LastFLadder) {
+                GameObject LastDownLadderObject = GameObject.Find(LastSLadder + "" + (row - 1) + "d");
                 LastSLadder = LastFLadder;
-                GameObject LastDownLadderObject = GameObject.Find((row - 1) + "d");
                 GameObject LastUpLadderObject = null;
                 if(LastDownLadderObject != null) {
                     Destroy(LastDownLadderObject); // Destroy last row 2nd ladder               
-                    LastUpLadderObject = GameObject.Find((row - 1) + "u");
+                    LastUpLadderObject = GameObject.Find(LastFLadder + "" + (row - 1) + "u");
                     if(LastUpLadderObject != null)
-                        LastUpLadderObject.name = (row - 1) + "b"; // Change last row 1st ladder name
+                        LastUpLadderObject.name = LastFLadder + "" + (row - 1) + "b"; // Change last row 1st ladder name
                 }
             }
             GameObject Ladder1 = null;
@@ -74,14 +80,14 @@ public class GridManager : MonoBehaviour
                 Ladder2 = (GameObject)Instantiate(LadderPrefab, transform);; // Destroy if new ladder same room with connect ladder
             }
             if(Ladder1 != null){
-                Ladder1.transform.SetParent(GameObject.Find(row + "" + LastSLadder).transform);
+                Ladder1.transform.SetParent(GameObject.Find(LastSLadder + "" + row).transform);
                 Ladder1.transform.position = Vector3.Scale(new Vector3(0, 0, 0), new Vector3(1.2f, 1.2f, 0)) + Ladder1.transform.parent.transform.position;
-                Ladder1.name = row + "u";
-                if(Ladder2 == null) Ladder1.name = row + "b";
+                Ladder1.name = LastSLadder + "" + row + "u";
+                if(Ladder2 == null) Ladder1.name = LastSLadder + "" + row +"b";
             }
             if(Ladder2 != null){
-                Ladder2.transform.SetParent(GameObject.Find(row + "" + NewLadder).transform);
-                Ladder2.name = row + "d";
+                Ladder2.transform.SetParent(GameObject.Find(NewLadder + "" + row).transform);
+                Ladder2.name = NewLadder + "" + row + "d";
                 Ladder2.transform.position = Vector3.Scale(new Vector3(0, 0, 0), new Vector3(1.2f, 1.2f, 0)) + Ladder2.transform.parent.transform.position;
             }
             LastFLadder = LastSLadder;
@@ -99,7 +105,7 @@ public class GridManager : MonoBehaviour
                  GameObject ObjectTouched = TheTouch.transform.gameObject;
                  if(ObjectTouched != Character.transform.parent.gameObject) {
                     Debug.Log("start: " + Character.transform.parent.gameObject.name + ", target: " + ObjectTouched.name);
-                     CharacterPositioning(Character.transform.parent.gameObject, ObjectTouched);
+                     CharacterSteps(Character.transform.parent.gameObject, ObjectTouched);
                  }
              }
         }
@@ -115,47 +121,28 @@ public class GridManager : MonoBehaviour
     //         if (TheTouch.collider != null) {
     //              GameObject ObjectTouched = TheTouch.transform.gameObject;
     //              if(ObjectTouched != Character.transform.parent.gameObject) {
-    //                  CharacterPositioning(Character.transform.parent.gameObject, ObjectTouched);
+    //                  CharacterSteps(Character.transform.parent.gameObject, ObjectTouched);
     //              }
     //          }
     //     }
     // }
     #endregion
     
-    private void CharacterPositioning(GameObject StartRoom, GameObject TargetRoom){
-        int sx = StartRoom.GetComponent<RoomController>().X;
-        int sy = StartRoom.GetComponent<RoomController>().Y;
-        int tx = TargetRoom.GetComponent<RoomController>().X;
-        int ty = TargetRoom.GetComponent<RoomController>().Y;
-        int LadderX = StartRoom.GetComponent<RoomController>().LadderRoom[0];
-        bool isLadder = LadderX == sx;
-        if (tx != sx) {
-            int stepX = 0;
-            if (tx > sx) {
-                stepX = sx + 1;
-            } else {
-                stepX = sx - 1;
+    private void CharacterSteps(GameObject StartRoom, GameObject TargetRoom){
+        RoomController StartRoomController = StartRoom.GetComponent<RoomController>();
+        RoomController TargetRoomController = TargetRoom.GetComponent<RoomController>();
+        // reverse the start and target to get linked node at order
+        Node path = CharacterController.FindWay(TargetRoomController.X, TargetRoomController.Y, StartRoomController.X, StartRoomController.Y);
+        if (path != null) {
+            int i = 1;
+            do {
+                Debug.Log("step " + i + ": " + path.x +  " " + path.y);
+                i++;
+                path = path.parent;
             }
-            GameObject stepRoom = GameObject.Find(sy + "" + stepX);
-            Character.GetComponent<MainCharacterController>().PositionCharacter(stepRoom);
-            if (stepRoom == TargetRoom) return;
-            CharacterPositioning(stepRoom, TargetRoom);
-        } else if (isLadder) {
-            int stepY = 0;
-            if (ty > sy) {
-                stepY = sy + 1;
-            } else {
-                stepY = sy - 1;
-            }
-            GameObject stepRoom = GameObject.Find(stepY + "" + sx);
-            Character.GetComponent<MainCharacterController>().PositionCharacter(stepRoom);
-            if (stepRoom == TargetRoom) return;
-            CharacterPositioning(stepRoom, TargetRoom);
+             while (path != null);
         } else {
-            GameObject LadderRoom = GameObject.Find(sy + "" + LadderX);
-            CharacterPositioning(StartRoom, LadderRoom);
-            if (LadderRoom == TargetRoom) return;
-            CharacterPositioning(LadderRoom, TargetRoom);
+            Debug.Log("Cannot find a way");
         }
     }
 }

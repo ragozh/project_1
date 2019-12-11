@@ -118,7 +118,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5535476289050823085}
   - component: {fileID: 5467332465297218134}
-  m_Layer: 8
+  - component: {fileID: 392981985781476382}
+  m_Layer: 9
   m_Name: WallTile_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,6 +190,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &392981985781476382
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4095916745834806712}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.16, y: 2.56}
+    newSize: {x: 0.16, y: 2.56}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.15, y: 2.5}
+  m_EdgeRadius: 0
 --- !u!1 &5384350609374227157
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,5 +339,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.9, y: 2.5}
+  m_Size: {x: 4.7, y: 2.5}
   m_EdgeRadius: 0
