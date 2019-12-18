@@ -162,6 +162,7 @@ MonoBehaviour:
   Character: {fileID: 0}
   TouchPosition: {x: 0, y: 0, z: 0}
   ClickPosition: {x: 0, y: 0, z: 0}
+  CharacterController: {fileID: 0}
 --- !u!4 &331599917
 Transform:
   m_ObjectHideFlags: 0

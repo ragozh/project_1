@@ -8,20 +8,38 @@ public class MainCharacterController : MonoBehaviour
     public int Y;
     public int X;
     Vector3 NewPosition;
-    void Update(){
-        Vector2 position = transform.position;
-        position.x = position.x + 0.01f;
-        transform.position = position;
+    private bool FacingRight = true;
+    public List<GameObject> listPosition = new List<GameObject>();
+    public Vector3 curPosition;
+    public int curPositionIdx = 0;
+    Rigidbody2D rigidbody2d;
+    GameObject targetRoom;
+    void Start() 
+    {
+        //rigidbody2d = GetComponent<Rigidbody2D>();
+    }
+    void Update()
+    {
+        if (listPosition.Count > 0) {
+            if (transform.position != curPosition)
+            {
+                 transform.position = Vector3.MoveTowards(transform.position, curPosition, 4*Time.deltaTime);
+                // Vector3 position = Vector3.Lerp(transform.position, curPosition, 2*Time.deltaTime);
+                // rigidbody2d.MovePosition(position);
+            } else {
+                if (curPositionIdx < listPosition.Count - 1) {
+                    curPositionIdx++;
+                    curPosition = NewPositionCharacter(listPosition[curPositionIdx]);
+                }
+            }
+        }
     }
 
-    public void PositionCharacter(GameObject NewParent){
+    public Vector3 NewPositionCharacter(GameObject NewParent)
+    {
         transform.SetParent(NewParent.transform);
         Y = NewParent.GetComponent<RoomController>().Y;
         X = NewParent.GetComponent<RoomController>().X;
-        //NewPosition = NewCharacterPosition();
-        transform.position = NewCharacterPosition();
-    }
-    public Vector3 NewCharacterPosition(){
         Vector3 scale = new Vector3(1.2f, 1.2f, 0);
         if (X == 0) {
             return Vector3.Scale(new Vector3(1.5f, -1.1f, 0), scale) + transform.parent.gameObject.transform.position;
@@ -33,13 +51,58 @@ public class MainCharacterController : MonoBehaviour
         return transform.position;
     }
 
-    public Vector3 CharacterMoving() {
-        Vector3 direction = new Vector3();
-
+    public Vector3 CharacterDirection(Node steps)
+    {
+        Vector3 direction = new Vector3(steps.x - X, -(steps.y - Y), 0);
+        direction = direction.normalized;
         return direction;
     }
+    
+    public void CharacterSteps(GameObject StartRoom, GameObject TargetRoom){
+        targetRoom = TargetRoom;
+        RoomController StartRoomController = StartRoom.GetComponent<RoomController>();
+        RoomController TargetRoomController = TargetRoom.GetComponent<RoomController>();
+        // reverse the start and target to get linked node at order
+        Node path = FindWay(TargetRoomController.X, TargetRoomController.Y, StartRoomController.X, StartRoomController.Y);
+        if (path != null) {
+            do {
+                listPosition.Add(GameObject.Find(path.x + "" + path.y));
+                path = path.parent;
+            }
+             while (path != null);
+        } else {
+            Debug.Log("I dont know how to get there.");
+        }
+    }
+    public IEnumerator CharacterMoving()
+    {
+        float elapsedTime = 0;
+        if (transform.position != curPosition)
+        {
+            while (elapsedTime < 2)
+            {                
+                transform.position = Vector3.Lerp(transform.position, curPosition, elapsedTime / 2);
+                elapsedTime += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+        } else {
+            if (curPositionIdx < listPosition.Count - 1) {
+                curPositionIdx++;
+                curPosition = NewPositionCharacter(listPosition[curPositionIdx]);
+            }
+        }
+    }
+
+    private void Flip()
+	{
+		FacingRight = !FacingRight;
+		Vector3 theScale = transform.localScale;
+		theScale.x *= -1;
+		transform.localScale = theScale;
+	}
 
     #region A*
+    // a* algorithm for path finder
     public class Node
     {
         public int x;

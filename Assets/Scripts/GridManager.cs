@@ -17,7 +17,7 @@ public class GridManager : MonoBehaviour
     public GameObject Character;
     public Vector3 TouchPosition;
     public Vector3 ClickPosition;
-    MainCharacterController CharacterController;
+    public MainCharacterController CharacterController;
     // Start is called before the first frame update
     void Start()
     {
@@ -55,7 +55,8 @@ public class GridManager : MonoBehaviour
             RightRoomController.X = 2;
             RightRoom.name = 2 + "" + row;
             if(row == 0) {
-                CharacterController.PositionCharacter(RightRoom);
+                Character.transform.position = CharacterController.NewPositionCharacter(RightRoom);
+                CharacterController.curPosition = Character.transform.position;
             }
 
             #region Ladder create
@@ -105,7 +106,7 @@ public class GridManager : MonoBehaviour
                  GameObject ObjectTouched = TheTouch.transform.gameObject;
                  if(ObjectTouched != Character.transform.parent.gameObject) {
                     Debug.Log("start: " + Character.transform.parent.gameObject.name + ", target: " + ObjectTouched.name);
-                     CharacterSteps(Character.transform.parent.gameObject, ObjectTouched);
+                    CharacterController.CharacterSteps(Character.transform.parent.gameObject, ObjectTouched);
                  }
              }
         }
@@ -128,21 +129,4 @@ public class GridManager : MonoBehaviour
     // }
     #endregion
     
-    private void CharacterSteps(GameObject StartRoom, GameObject TargetRoom){
-        RoomController StartRoomController = StartRoom.GetComponent<RoomController>();
-        RoomController TargetRoomController = TargetRoom.GetComponent<RoomController>();
-        // reverse the start and target to get linked node at order
-        Node path = CharacterController.FindWay(TargetRoomController.X, TargetRoomController.Y, StartRoomController.X, StartRoomController.Y);
-        if (path != null) {
-            int i = 1;
-            do {
-                Debug.Log("step " + i + ": " + path.x +  " " + path.y);
-                i++;
-                path = path.parent;
-            }
-             while (path != null);
-        } else {
-            Debug.Log("Cannot find a way");
-        }
-    }
 }

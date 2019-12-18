@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 2424704566043760321}
   - component: {fileID: 2424704566043760322}
   - component: {fileID: 3310473268246501999}
+  - component: {fileID: 8200889852186164732}
   m_Layer: 9
   m_Name: DoorTile_0
   m_TagString: Untagged
@@ -217,6 +218,32 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 1
+  m_Offset: {x: -2.4, y: -1.2}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.16, y: 2.56}
+    newSize: {x: 0.16, y: 2.56}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.01, y: 0.15}
+  m_EdgeRadius: 0
+--- !u!61 &8200889852186164732
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2424704566043760323}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -231,7 +258,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.9, y: 0.15}
+  m_Size: {x: 4.9, y: 0.14}
   m_EdgeRadius: 0
 --- !u!1 &2424704566733203155
 GameObject:
