@@ -7,29 +7,30 @@ public class MainCharacterController : MonoBehaviour
 {
     public int Y;
     public int X;
-    Vector3 NewPosition;
     private bool FacingRight = true;
     public List<GameObject> listPosition = new List<GameObject>();
     public Vector3 curPosition;
     public int curPositionIdx = 0;
-    Rigidbody2D rigidbody2d;
-    GameObject targetRoom;
+    Camera mainCam;
+    float newCamPositionY;
     void Start() 
     {
-        //rigidbody2d = GetComponent<Rigidbody2D>();
+        mainCam = Camera.main; 
     }
     void Update()
     {
         if (listPosition.Count > 0) {
             if (transform.position != curPosition)
             {
-                 transform.position = Vector3.MoveTowards(transform.position, curPosition, 4*Time.deltaTime);
-                // Vector3 position = Vector3.Lerp(transform.position, curPosition, 2*Time.deltaTime);
-                // rigidbody2d.MovePosition(position);
+                transform.position = Vector3.MoveTowards(transform.position, curPosition, 4*Time.deltaTime);
+                Vector3 camCurPosition = mainCam.transform.position;
+                Vector3 newCamPosition = new Vector3(camCurPosition.x, newCamPositionY, -10);
+                mainCam.transform.position = Vector3.MoveTowards(camCurPosition, newCamPosition, 4*Time.deltaTime);
             } else {
                 if (curPositionIdx < listPosition.Count - 1) {
                     curPositionIdx++;
                     curPosition = NewPositionCharacter(listPosition[curPositionIdx]);
+                    newCamPositionY = listPosition[curPositionIdx].transform.position.y;
                 }
             }
         }
@@ -50,16 +51,8 @@ public class MainCharacterController : MonoBehaviour
         }
         return transform.position;
     }
-
-    public Vector3 CharacterDirection(Node steps)
-    {
-        Vector3 direction = new Vector3(steps.x - X, -(steps.y - Y), 0);
-        direction = direction.normalized;
-        return direction;
-    }
     
     public void CharacterSteps(GameObject StartRoom, GameObject TargetRoom){
-        targetRoom = TargetRoom;
         RoomController StartRoomController = StartRoom.GetComponent<RoomController>();
         RoomController TargetRoomController = TargetRoom.GetComponent<RoomController>();
         // reverse the start and target to get linked node at order
@@ -72,24 +65,6 @@ public class MainCharacterController : MonoBehaviour
              while (path != null);
         } else {
             Debug.Log("I dont know how to get there.");
-        }
-    }
-    public IEnumerator CharacterMoving()
-    {
-        float elapsedTime = 0;
-        if (transform.position != curPosition)
-        {
-            while (elapsedTime < 2)
-            {                
-                transform.position = Vector3.Lerp(transform.position, curPosition, elapsedTime / 2);
-                elapsedTime += Time.deltaTime;
-                yield return new WaitForEndOfFrame();
-            }
-        } else {
-            if (curPositionIdx < listPosition.Count - 1) {
-                curPositionIdx++;
-                curPosition = NewPositionCharacter(listPosition[curPositionIdx]);
-            }
         }
     }
 
