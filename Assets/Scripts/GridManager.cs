@@ -15,8 +15,8 @@ public class GridManager : MonoBehaviour
     public GameObject CharacterPrefab;
     public GameObject LadderPrefab;
     public GameObject Character;
-    public Vector3 TouchPosition;
-    public Vector3 ClickPosition;
+    private Vector3 TouchPosition;
+    private Vector3 ClickPosition;
     public MainCharacterController CharacterController;
     // Start is called before the first frame update
     void Start()

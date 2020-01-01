@@ -341,7 +341,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Y: 0
   X: 0
-  LadderRoom: 
+  MapRevealed: 0
+  Fog: 1
+  MapCoverPrefab: {fileID: 839562049060318873, guid: 5bec7162edae2404da5afed9177d2138,
+    type: 3}
 --- !u!61 &6351310631835499309
 BoxCollider2D:
   m_ObjectHideFlags: 0

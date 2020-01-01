@@ -38,9 +38,18 @@ public class MainCharacterController : MonoBehaviour
 
     public Vector3 NewPositionCharacter(GameObject NewParent)
     {
+        if(transform.parent != null)
+        {
+            int oldX = transform.parent.gameObject.GetComponent<RoomController>().X;
+            int oldY = transform.parent.gameObject.GetComponent<RoomController>().Y;
+            GameObject oldParent = GameObject.Find(oldX + "" + oldY);
+            oldParent.GetComponent<RoomController>().Fog = true;
+        }
         transform.SetParent(NewParent.transform);
         Y = NewParent.GetComponent<RoomController>().Y;
         X = NewParent.GetComponent<RoomController>().X;
+        NewParent.GetComponent<RoomController>().MapRevealed = true;
+        NewParent.GetComponent<RoomController>().Fog = false;
         Vector3 scale = new Vector3(1.2f, 1.2f, 0);
         if (X == 0) {
             return Vector3.Scale(new Vector3(1.5f, -1.1f, 0), scale) + transform.parent.gameObject.transform.position;
@@ -164,19 +173,22 @@ public class MainCharacterController : MonoBehaviour
     
     bool checkRoomMovement(int x, int y, int curX, int curY)
     {
-        if(x < 0 || x > 2){
+        if (x < 0 || x > 2)
+        {
             return false;
         }
+
         string findB = curX + "" + curY + "b";
         string findD = curX + "" + curY + "d";
         string findU = curX + "" + curY + "u";
+        GameObject ladder;
         if (y > curY) {
-            GameObject ladder = GameObject.Find(findD);
+            ladder = GameObject.Find(findD);
             if (ladder == null) ladder = GameObject.Find(findB);
             if (ladder == null) return false;
         } 
         if (y < curY) {
-            GameObject ladder = GameObject.Find(findU);
+            ladder = GameObject.Find(findU);
             if (ladder == null) ladder = GameObject.Find(findB);
             if (ladder == null) return false;            
         }
