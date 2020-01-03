@@ -56,7 +56,7 @@ public class GridManager : MonoBehaviour
             RightRoomController.X = 2;
             RightRoom.name = 2 + "" + row;
             if(row == 0) {
-                Character.transform.position = CharacterController.NewPositionCharacter(RightRoom);
+                Character.transform.position = CharacterController.NewPositionCharacter(RightRoom, true);
                 CharacterController.curPosition = Character.transform.position;
             }
 

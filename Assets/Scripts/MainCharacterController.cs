@@ -17,7 +17,7 @@ public class MainCharacterController : MonoBehaviour
     public int X;
     private bool FacingRight = true;
     public List<GameObject> listPosition = new List<GameObject>();
-    public Vector3 curPosition;
+    public Vector3 curPosition; // Position for path following
     public int curPositionIdx = 0;
     Camera mainCam;
     float newCamPositionY;
@@ -50,7 +50,8 @@ public class MainCharacterController : MonoBehaviour
         maxHP = 100;
         curHP = maxHP;
     }
-    public Vector3 NewPositionCharacter(GameObject NewParent)
+    // Place character into the room, generate phase will not trigger enter room events
+    public Vector3 NewPositionCharacter(GameObject NewParent, bool generate = false)
     {
         if(transform.parent != null)
         {
@@ -60,15 +61,21 @@ public class MainCharacterController : MonoBehaviour
             oldParent.GetComponent<RoomController>().Fog = true;
         }
         transform.SetParent(NewParent.transform);
-        curHP -= 2;
-        UIHealthBarController.instance.SetValue(curHP / (float) maxHP);
-        TextPopUpController.Create(transform.position, "-2");
+        
+
         RoomController newRoomController = NewParent.GetComponent<RoomController>();
         Y = newRoomController.Y;
         X = newRoomController.X;
         newRoomController.MapRevealed = true;
-        newRoomController.Fog = false;
-        newRoomController.EnterRoom();
+        newRoomController.Fog = false;      
+        if (!generate) // Enter room Events
+        {
+            newRoomController.EnterRoom();  
+            curHP -= 2;
+            UIStaminaBarController.instance.SetValue(curHP / (float) maxHP);
+            TextPopUpController.Create(transform.position, "-2", Color.white, 8);
+        }
+        
         Vector3 scale = new Vector3(1.2f, 1.2f, 0);
         if (X == 0) {
             return Vector3.Scale(new Vector3(1.5f, -1.1f, 0), scale) + transform.parent.gameObject.transform.position;

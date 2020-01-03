@@ -5,11 +5,11 @@ using TMPro;
 
 public class TextPopUpController : MonoBehaviour
 {
-    public static TextPopUpController Create(Vector3 position, string text)
+    public static TextPopUpController Create(Vector3 position, string text, Color? color = null, int fontSize = 8)
     {
         Transform damagePopUpText = Instantiate(GameAssets.i.TextPopUp, position, Quaternion.identity);
         TextPopUpController textPopUpController = damagePopUpText.GetComponent<TextPopUpController>();
-        textPopUpController.Setup(text);
+        textPopUpController.Setup(text, color, fontSize);
         return textPopUpController;
     }
     private TextMeshPro textMesh;
@@ -18,10 +18,13 @@ public class TextPopUpController : MonoBehaviour
     void Awake() {
         textMesh = transform.GetComponent<TextMeshPro>();
     }
-    public void Setup(string text)
+    public void Setup(string text, Color? color, int fontSize)
     {
+        textMesh.fontSize = fontSize;
+        if (color == null) color = Color.white;
+        textColor = color.Value;
         textMesh.SetText(text);
-        textColor = textMesh.color;
+        textMesh.color = textColor;
         disapearTimer = 1f;
     }
 

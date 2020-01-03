@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIHealthBarController : MonoBehaviour
+public class UIStaminaBarController : MonoBehaviour
 {
-    public static UIHealthBarController instance { get; private set; }
+    public static UIStaminaBarController instance { get; private set; }
     public Image mask;
     float originalSize;    
     void Awake() 
