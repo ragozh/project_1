@@ -43,4 +43,10 @@ public class RoomController : MonoBehaviour
             }
         }
     }
+
+    public void EnterRoom()
+    {
+        // Search the room or leave
+        // Encounter monsters if available
+    }
 }

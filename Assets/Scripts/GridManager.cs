@@ -23,6 +23,7 @@ public class GridManager : MonoBehaviour
     {
         Character = (GameObject)Instantiate(CharacterPrefab);
         CharacterController = Character.GetComponent<MainCharacterController>();
+        CharacterController.GenerateCharacterStats();
         GenerateGrid();
     }
     void Update() {

@@ -5,6 +5,14 @@ using UnityEngine;
 
 public class MainCharacterController : MonoBehaviour
 {
+    #region Stats of Character
+    private int maxHP;
+    public int curHP;
+    public int maxStamina;
+    public int curStamina;
+    public int curXP;
+    #endregion
+    #region Moving Character Variables
     public int Y;
     public int X;
     private bool FacingRight = true;
@@ -13,9 +21,10 @@ public class MainCharacterController : MonoBehaviour
     public int curPositionIdx = 0;
     Camera mainCam;
     float newCamPositionY;
+    #endregion
     void Start() 
     {
-        mainCam = Camera.main; 
+        mainCam = Camera.main;
     }
     void Update()
     {
@@ -34,8 +43,13 @@ public class MainCharacterController : MonoBehaviour
                 }
             }
         }
-    }
 
+    }
+    public void GenerateCharacterStats()
+    {
+        maxHP = 100;
+        curHP = maxHP;
+    }
     public Vector3 NewPositionCharacter(GameObject NewParent)
     {
         if(transform.parent != null)
@@ -46,10 +60,15 @@ public class MainCharacterController : MonoBehaviour
             oldParent.GetComponent<RoomController>().Fog = true;
         }
         transform.SetParent(NewParent.transform);
-        Y = NewParent.GetComponent<RoomController>().Y;
-        X = NewParent.GetComponent<RoomController>().X;
-        NewParent.GetComponent<RoomController>().MapRevealed = true;
-        NewParent.GetComponent<RoomController>().Fog = false;
+        curHP -= 2;
+        UIHealthBarController.instance.SetValue(curHP / (float) maxHP);
+        TextPopUpController.Create(transform.position, "-2");
+        RoomController newRoomController = NewParent.GetComponent<RoomController>();
+        Y = newRoomController.Y;
+        X = newRoomController.X;
+        newRoomController.MapRevealed = true;
+        newRoomController.Fog = false;
+        newRoomController.EnterRoom();
         Vector3 scale = new Vector3(1.2f, 1.2f, 0);
         if (X == 0) {
             return Vector3.Scale(new Vector3(1.5f, -1.1f, 0), scale) + transform.parent.gameObject.transform.position;
