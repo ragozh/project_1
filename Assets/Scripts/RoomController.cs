@@ -46,7 +46,35 @@ public class RoomController : MonoBehaviour
 
     public void EnterRoom()
     {
-        // Search the room or leave
-        // Encounter monsters if available
+        MainCharacterData.curStamina -= MainCharacterData.moveCost;
+        UIStaminaBarController.instance.SetValue(MainCharacterData.curStamina, MainCharacterData.maxStamina);
+        TextPopUpController.Create(transform.position, "-" + MainCharacterData.moveCost, Color.white, 8);        
+        Debug.Log("Enter");
+        // Ambush chance
+        int ambush = UnityEngine.Random.Range(0, 10);
+        if(ambush <= 1){
+            EncounterMobs(true);
+        } else {
+            //dialog
+        }
+    }
+    // Params: character's data, isAmbushed, 
+    private bool EncounterMobs(bool ambush = false)
+    {
+        bool winState = true;
+        // Battle system
+        int result = UnityEngine.Random.Range(0,100);
+        if(result <= 1)
+        {
+            // 2% lose
+            winState = false;
+        }
+        // End battle
+        return winState;
+    }
+
+    private void SearchTheRoom()
+    {
+        
     }
 }

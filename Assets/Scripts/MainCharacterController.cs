@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MainCharacterController : MonoBehaviour
 {
     #region Stats of Character
-    private int maxHP;
-    public int curHP;
-    public int maxStamina;
-    public int curStamina;
-    public int curXP;
     #endregion
     #region Moving Character Variables
     public int Y;
     public int X;
     private bool FacingRight = true;
-    public List<GameObject> listPosition = new List<GameObject>();
+    public List<GameObject> listNewPosition = new List<GameObject>();
+    public List<GameObject> listOldPosition = new List<GameObject>();
     public Vector3 curPosition; // Position for path following
     public int curPositionIdx = 0;
     Camera mainCam;
@@ -25,10 +21,11 @@ public class MainCharacterController : MonoBehaviour
     void Start() 
     {
         mainCam = Camera.main;
+        listOldPosition.Add(transform.parent.gameObject);
     }
     void Update()
     {
-        if (listPosition.Count > 0) {
+        if (listNewPosition.Count > 0) {
             if (transform.position != curPosition)
             {
                 transform.position = Vector3.MoveTowards(transform.position, curPosition, 4*Time.deltaTime);
@@ -36,10 +33,15 @@ public class MainCharacterController : MonoBehaviour
                 Vector3 newCamPosition = new Vector3(camCurPosition.x, newCamPositionY, -10);
                 mainCam.transform.position = Vector3.MoveTowards(camCurPosition, newCamPosition, 4*Time.deltaTime);
             } else {
-                if (curPositionIdx < listPosition.Count - 1) {
+                // If reach the new position, add to old list and trigger enter room event if did not
+                if(!listOldPosition.Any(pos => pos == listNewPosition[curPositionIdx])){
+                    listOldPosition.Add(listNewPosition[curPositionIdx]);
+                    listNewPosition[curPositionIdx].GetComponent<RoomController>().EnterRoom();
+                }  
+                if (curPositionIdx < listNewPosition.Count - 1) {
                     curPositionIdx++;
-                    curPosition = NewPositionCharacter(listPosition[curPositionIdx]);
-                    newCamPositionY = listPosition[curPositionIdx].transform.position.y;
+                    curPosition = NewPositionCharacter(listNewPosition[curPositionIdx]);
+                    newCamPositionY = listNewPosition[curPositionIdx].transform.position.y;
                 }
             }
         }
@@ -47,8 +49,13 @@ public class MainCharacterController : MonoBehaviour
     }
     public void GenerateCharacterStats()
     {
-        maxHP = 100;
-        curHP = maxHP;
+        MainCharacterData.maxHP = 100;
+        MainCharacterData.curHP = MainCharacterData.maxHP;
+        UIHealthBarController.instance.SetValue(MainCharacterData.curHP, MainCharacterData.maxHP);
+        MainCharacterData.maxStamina = 100;
+        MainCharacterData.curStamina = MainCharacterData.maxStamina;
+        UIStaminaBarController.instance.SetValue(MainCharacterData.curStamina, MainCharacterData.maxStamina);
+        MainCharacterData.moveCost = 1;
     }
     // Place character into the room, generate phase will not trigger enter room events
     public Vector3 NewPositionCharacter(GameObject NewParent, bool generate = false)
@@ -70,10 +77,7 @@ public class MainCharacterController : MonoBehaviour
         newRoomController.Fog = false;      
         if (!generate) // Enter room Events
         {
-            newRoomController.EnterRoom();  
-            curHP -= 2;
-            UIStaminaBarController.instance.SetValue(curHP / (float) maxHP);
-            TextPopUpController.Create(transform.position, "-2", Color.white, 8);
+            Debug.Log("Before eneter");         
         }
         
         Vector3 scale = new Vector3(1.2f, 1.2f, 0);
@@ -93,8 +97,12 @@ public class MainCharacterController : MonoBehaviour
         // reverse the start and target to get linked node at order
         Node path = FindWay(TargetRoomController.X, TargetRoomController.Y, StartRoomController.X, StartRoomController.Y);
         if (path != null) {
+            listNewPosition = new List<GameObject>();
+            listOldPosition = new List<GameObject>();
+            listOldPosition.Add(transform.parent.gameObject);
+            curPositionIdx = 0;
             do {
-                listPosition.Add(GameObject.Find(path.x + "" + path.y));
+                listNewPosition.Add(GameObject.Find(path.x + "" + path.y));
                 path = path.parent;
             }
              while (path != null);

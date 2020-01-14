@@ -6,7 +6,7 @@ using static MainCharacterController;
 
 public class GridManager : MonoBehaviour
 {
-    private int rows = 100;
+    private int rows = 4;
     float tileSizeX = 5.9f;
     float tileSizeY = 3;
     public GameObject LeftRoomPrefab;
@@ -106,7 +106,6 @@ public class GridManager : MonoBehaviour
             if (TheTouch.collider != null) {
                  GameObject ObjectTouched = TheTouch.transform.gameObject;
                  if(ObjectTouched != Character.transform.parent.gameObject) {
-                    Debug.Log("start: " + Character.transform.parent.gameObject.name + ", target: " + ObjectTouched.name);
                     CharacterController.CharacterSteps(Character.transform.parent.gameObject, ObjectTouched);
                  }
              }

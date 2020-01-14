@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIHealthBarController : MonoBehaviour
 {
     public static UIHealthBarController instance { get; private set; }
+    public Text healthText;
     public Image mask;
     float originalSize;    
     void Awake() 
@@ -17,8 +18,10 @@ public class UIHealthBarController : MonoBehaviour
     {
         originalSize = mask.rectTransform.rect.width;
     }
-    public void SetValue(float value)
-    {				      
+    public void SetValue(int curHP, int maxHP)
+    {	
+        float value = curHP / (float) maxHP;			      
         mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, originalSize * value);
+        healthText.text = curHP + "/" + maxHP;
     }
 }

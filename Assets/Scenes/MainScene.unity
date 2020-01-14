@@ -1003,6 +1003,7 @@ GameObject:
   - component: {fileID: 2109065850}
   - component: {fileID: 2109065849}
   - component: {fileID: 2109065851}
+  - component: {fileID: 2109065852}
   m_Layer: 5
   m_Name: StatsFrame
   m_TagString: Untagged
@@ -1082,4 +1083,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79a6461d56084ec42bbd61259e491e1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthText: {fileID: 1122179219}
   mask: {fileID: 1853444540}
+--- !u!114 &2109065852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2109065847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84dac530ab4a14946bf8b77b49cbe47a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staminaText: {fileID: 183848327}
+  mask: {fileID: 1593284640}
