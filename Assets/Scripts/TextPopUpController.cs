@@ -33,7 +33,7 @@ public class TextPopUpController : MonoBehaviour
         transform.position += new Vector3(0, moveYSpeed) * Time.deltaTime;
         disapearTimer -= Time.deltaTime;
         if (disapearTimer <= 0) {
-            float disapearSpeed = 3f;
+            float disapearSpeed = 999f;
             textColor.a -= disapearSpeed*Time.deltaTime;
             textMesh.color = textColor;
             if (textColor.a <= 0) {

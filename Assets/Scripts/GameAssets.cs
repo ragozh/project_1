@@ -14,6 +14,6 @@ public class GameAssets : MonoBehaviour
     }
 
     public Transform TextPopUp;
-
+    public Dialog dialog;
 
 }

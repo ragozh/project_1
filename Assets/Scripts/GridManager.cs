@@ -56,7 +56,8 @@ public class GridManager : MonoBehaviour
             RightRoomController.X = 2;
             RightRoom.name = 2 + "" + row;
             if(row == 0) {
-                Character.transform.position = CharacterController.NewPositionCharacter(RightRoom, true);
+                LeftRoomController.isClear = true;
+                Character.transform.position = CharacterController.NewPositionCharacter(LeftRoom);
                 CharacterController.curPosition = Character.transform.position;
             }
 
@@ -107,6 +108,7 @@ public class GridManager : MonoBehaviour
                  GameObject ObjectTouched = TheTouch.transform.gameObject;
                  if(ObjectTouched != Character.transform.parent.gameObject) {
                     CharacterController.CharacterSteps(Character.transform.parent.gameObject, ObjectTouched);
+                    //CharacterController.Test();
                  }
              }
         }
