@@ -8,11 +8,7 @@ public class EventManager : MonoBehaviour
     {
         MainCharacterData.curStamina -= MainCharacterData.moveCost;
         UIStaminaBarController.instance.SetValue(MainCharacterData.curStamina, MainCharacterData.maxStamina);
-        TextPopUpController.Create(room.transform.position, "-" + MainCharacterData.moveCost, Color.white, 8);        
-        // RoomController roomController = room.GetComponent<RoomController>();        
-        // if(!roomController.isClear){
-        //     EnterRoom(room);
-        // }
+        TextPopUpController.Create(room.transform.position, "-" + MainCharacterData.moveCost, Color.white, 8);
     }
 
     public void EnterRoom(GameObject room,bool isTarget = false){
@@ -23,7 +19,7 @@ public class EventManager : MonoBehaviour
             EncounterMobs(true);
         } else {
             //dialog
-            FindObjectOfType<DialogManager>().StartDialog(GameAssets.i.dialog);
+            
         }
         Debug.Log("Entered the room: " + room.name);
         if(isTarget)

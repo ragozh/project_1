@@ -410,8 +410,9 @@ GameObject:
   - component: {fileID: 1068739602}
   - component: {fileID: 1068739604}
   - component: {fileID: 1068739603}
+  - component: {fileID: 1068739605}
   m_Layer: 0
-  m_Name: Image
+  m_Name: Dialog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -432,10 +433,10 @@ RectTransform:
   m_Father: {fileID: 2127450093}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.17080502, y: 0}
-  m_AnchorMax: {x: 0.85700005, y: 0.30655918}
-  m_AnchoredPosition: {x: 1.2999878, y: -0.024993896}
-  m_SizeDelta: {x: -1.1, y: 0.049995}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -128.98}
+  m_SizeDelta: {x: 544.9, y: 114.04999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1068739603
 MonoBehaviour:
@@ -473,6 +474,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1068739601}
   m_CullTransparentMesh: 0
+--- !u!95 &1068739605
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068739601}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5b5ef209041befd4e9f5d1097d8c7b14, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1122179217
 GameObject:
   m_ObjectHideFlags: 0
@@ -1139,6 +1159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogText: {fileID: 2119017018}
+  animator: {fileID: 1068739605}
 --- !u!4 &1977034698
 Transform:
   m_ObjectHideFlags: 0
@@ -1356,7 +1377,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2127450093
 RectTransform:
   m_ObjectHideFlags: 0
