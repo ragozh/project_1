@@ -19,7 +19,16 @@ public class EventManager : MonoBehaviour
             EncounterMobs(true);
         } else {
             //dialog
-            
+            Debug.Log("Start dialog");
+            PageableDialog dialog = DialogManager.Instance().CreatePageableDialog();
+            dialog.AddPage("You reached a new room, what to do?");
+            dialog.OnAccept("Search The Room", () => { 
+                Debug.Log("FINISHED");
+                dialog.Hide();
+            });
+            dialog.SetTitle("New Room");
+            dialog.Show();
+            Debug.Log("Start dialog");
         }
         Debug.Log("Entered the room: " + room.name);
         if(isTarget)

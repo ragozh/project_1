@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static MainCharacterController;
 
 public class GridManager : MonoBehaviour
@@ -55,6 +56,9 @@ public class GridManager : MonoBehaviour
             RightRoomController.Y = row;
             RightRoomController.X = 2;
             RightRoom.name = 2 + "" + row;
+            LeftRoomController.isClear = false;
+            RightRoomController.isClear = false;
+            MidRoomController.isClear = false;
             if(row == 0) {
                 LeftRoomController.isClear = true;
                 Character.transform.position = CharacterController.NewPositionCharacter(LeftRoom);
@@ -101,16 +105,22 @@ public class GridManager : MonoBehaviour
     private void ClickEvent(){
         if (Input.GetMouseButtonDown(0))
         {
-            ClickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 TouchPosition2D = new Vector2(ClickPosition.x, ClickPosition.y);
-            RaycastHit2D TheTouch = Physics2D.Raycast(TouchPosition2D, Camera.main.transform.forward);
-            if (TheTouch.collider != null) {
-                 GameObject ObjectTouched = TheTouch.transform.gameObject;
-                 if(ObjectTouched != Character.transform.parent.gameObject) {
-                    CharacterController.CharacterSteps(Character.transform.parent.gameObject, ObjectTouched);
-                    //CharacterController.Test();
-                 }
-             }
+            if (EventSystem.current.currentSelectedGameObject == null){
+                ClickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 TouchPosition2D = new Vector2(ClickPosition.x, ClickPosition.y);
+                RaycastHit2D TheTouch = Physics2D.Raycast(TouchPosition2D, Camera.main.transform.forward);
+                if (TheTouch.collider != null) {
+                    GameObject ObjectTouched = TheTouch.transform.gameObject;
+                    if(ObjectTouched != Character.transform.parent.gameObject) {
+                        CharacterController.CharacterSteps(Character.transform.parent.gameObject, ObjectTouched);
+                        //CharacterController.Test();
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log(EventSystem.current.currentSelectedGameObject);
+            }
         }
     }
 

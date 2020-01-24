@@ -48,7 +48,7 @@ public class MainCharacterController : MonoBehaviour
                 }
                 // Get the next room
                 else if (curPositionIdx < listNewPosition.Count - 1) {
-                    curPositionIdx++;
+                    curPositionIdx++; 
                     curPosition = NewPositionCharacter(listNewPosition[curPositionIdx]);
                     newCamPositionY = listNewPosition[curPositionIdx].transform.position.y;
                 }
