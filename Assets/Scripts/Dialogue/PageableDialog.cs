@@ -10,17 +10,18 @@ public class PageableDialog : MonoBehaviour {
 
     // title and subtitle for the entire dialog, like NPC name and quest name or something
     public Text title, subtitle;
-
     // buttons and their text components (Prev/Next and on the last page - Accept)
     public Text nextText, prevText;
     public Button prevButton, nextButton;
+    public bool isDialogOff = true;
 
     // accept text when we're on the last page of the dialog
     private string btnPrevText = "Keep Going"; 
     private string btnNextText = "Search The Room";
 
     // what happens when user clicks Accept
-    private UnityAction onAcceptAction;
+    private UnityAction onNextAction;
+    private UnityAction onPrevAction;
 
     // canvas group for the entire dialog
     private CanvasGroup cg;
@@ -66,9 +67,15 @@ public class PageableDialog : MonoBehaviour {
     }
 
     // what happens on the last page, when user clicks Accept
-    public PageableDialog OnAccept(string text, UnityAction action){
+    public PageableDialog OnNextBtnAction(string text, UnityAction action){
         btnNextText = text;
-        onAcceptAction = action;
+        onNextAction = action;
+        return this;
+    }
+
+    public PageableDialog OnPrevBtnAction(string text, UnityAction action){
+        btnPrevText = text;
+        onPrevAction = action;
         return this;
     }
 
@@ -91,6 +98,7 @@ public class PageableDialog : MonoBehaviour {
         // when we're finished, we destroy the dialog object. reset is not needed, you can remove it.
         Reset();
         Destroy(this.gameObject);
+        isDialogOff = true;
     }
 
     // we show the entire dialog and then, show the first page instantly.
@@ -106,6 +114,12 @@ public class PageableDialog : MonoBehaviour {
         if(pages.Count > 0){
             ShowPage(0);
         } else throw new Exception ("We have an error, m4te! Wrong implementation. You have to add pages to the dialog before showing it.");
+        isDialogOff = false;
+    }
+
+    public bool isDialogIsOff()
+    {
+        return isDialogOff;
     }
 
     public void ShowPage(int pageNum){
@@ -124,12 +138,12 @@ public class PageableDialog : MonoBehaviour {
         // if we're showing the last page, we change the button's text to our accept text, like "Accept Quest" and add the OnAcceptAction to be performed when clicked.
         if(_currentPage == (pages.Count - 1)){
             nextText.text = btnNextText;
-            nextButton.onClick.AddListener(onAcceptAction);
+            nextButton.onClick.AddListener(onNextAction);
         } 
         else // otherwise, we remove this listener or it would accept the quest on each page :D
         {
             nextText.text = "Next Page";
-            nextButton.onClick.RemoveListener(onAcceptAction);
+            nextButton.onClick.RemoveListener(onNextAction);
         }
 
         // finally, we iterate through pages, show the one we picked and hide the rest.

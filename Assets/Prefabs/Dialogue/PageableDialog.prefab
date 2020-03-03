@@ -568,6 +568,7 @@ MonoBehaviour:
   prevText: {fileID: 5753505641918877733}
   prevButton: {fileID: 5753505641660150367}
   nextButton: {fileID: 5753505640404426356}
+  isDialogOff: 1
   pagePrefab: {fileID: 2634979654642384692, guid: 5fa02cdb0e153e34290db076175326f0,
     type: 3}
   pages: []

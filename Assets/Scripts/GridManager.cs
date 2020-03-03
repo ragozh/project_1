@@ -17,7 +17,6 @@ public class GridManager : MonoBehaviour
     public GameObject LadderPrefab;
     public GameObject Character;
     private Vector3 TouchPosition;
-    private Vector3 ClickPosition;
     public MainCharacterController CharacterController;
     // Start is called before the first frame update
     void Start()
@@ -105,22 +104,7 @@ public class GridManager : MonoBehaviour
     private void ClickEvent(){
         if (Input.GetMouseButtonDown(0))
         {
-            if (EventSystem.current.currentSelectedGameObject == null){
-                ClickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector2 TouchPosition2D = new Vector2(ClickPosition.x, ClickPosition.y);
-                RaycastHit2D TheTouch = Physics2D.Raycast(TouchPosition2D, Camera.main.transform.forward);
-                if (TheTouch.collider != null) {
-                    GameObject ObjectTouched = TheTouch.transform.gameObject;
-                    if(ObjectTouched != Character.transform.parent.gameObject) {
-                        CharacterController.CharacterSteps(Character.transform.parent.gameObject, ObjectTouched);
-                        //CharacterController.Test();
-                    }
-                }
-            }
-            else
-            {
-                Debug.Log(EventSystem.current.currentSelectedGameObject);
-            }
+            FindObjectOfType<EventManager>().clickTheRoomPositionToMoveCharacter(Character);
         }
     }
 
